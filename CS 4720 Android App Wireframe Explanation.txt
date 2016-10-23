@@ -1,0 +1,25 @@
+The first screen of the wireframe (titled “Welcome to Treasure Hunters!”) is a screen that will only be viewed on the first initial startup of the app. It will allow the user
+to set their username (in case we have excess time and try to ambitiously network the app somewhat) and their profile icon. The profile icon will just be a degree of 
+customization where the user can select one icon out of several to associate with their account.
+
+Once all fields have been input in the first screen, and on startup during all subsequent launches of the app, the second screen of the wireframe will appear (the one with 
+the street-view). In this screen, the user can see their current location (represented by the blue dot), their maximum detection radius (represented by the outer blue 
+circle), their profile icon (represented in the top right corner in the wireframe as the team Instinct logo), and treasure challenges in the surrounding area (represented 
+by the gift boxes). When a treasure challenge icon enters the user’s detection radius, the button “Accept Challenge” will appear in the top left corner. Clicking on this 
+button will launch screen 3 of the wireframe (the one with the maze). If the user selects the “Profile” button from the initial screen, then this will launch screen 5 of the 
+wireframe (titled “Profile”).
+
+If the user chooses to accept the challenge and screen 3 is launched, then the user will see some form of a puzzle (or perhaps a quiz. The current maze in the wireframe is 
+a placeholder to represent some kind of brain teaser). If the user successfully completes the brain teaser before the timer runs out, then screen 4 of the wireframe (titled 
+“Success!!”) will be launched. If the user gives up and presses the “Quit” button or fails to complete the brain teaser before the timer runs out, then the user will be 
+returned to screen 2 of the wireframe. If the user succeeds at completing the brain teaser and screen 4 is launched, then the icons underneath the label “Loot” are items that
+will be added to the user’s collection. The “Continue” button will return the user to screen 2.
+
+If the user navigated to the “Profile” section (screen 5), then they will see several values. The first one is their profile icon. The second is “Steps taken today” which 
+will display the steps the user has taken in that day while using the app. The third value labeled “Steps taken total” will display the total steps the user has taken while 
+using the app since it’s download. These two values will be used to add a potential/probable feature where the user can collect treasure chests that require a certain number 
+of steps to be unlocked (yes just like Pokemon Go). The fourth value labeled “Loot” will show either the user’s entire item collection or, if the number of items that can 
+possibly be collected gets too massive, categories of items to add some degree of organization. Currently we are working with the assumption that it will only display the 
+user’s entire item collection. Clicking on an item will launch screen 6. Screen 6 is a feature that will be added if we have enough time. It’s not essential but it would be 
+nice. Screen 6 will display information about the clicked on item such as: item name, a picture of the item, a brief description of the item, and the rarity level of the 
+item. On screen 5, the “Home” button will return the user to screen 2.
