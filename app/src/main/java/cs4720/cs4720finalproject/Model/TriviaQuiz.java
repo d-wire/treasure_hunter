@@ -1,5 +1,6 @@
 package cs4720.cs4720finalproject.Model;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,17 +9,18 @@ import java.util.List;
  */
 public class TriviaQuiz {
 
+    @SerializedName("results")
     private ArrayList<QuizQuestion> results;
 
     public TriviaQuiz() {
         this.results = new ArrayList<QuizQuestion>();
     }
 
-    public ArrayList<QuizQuestion> getQuizQuestions() {
+    public ArrayList<QuizQuestion> getResults() {
         return results;
     }
 
-    public void setQuizQuestions(ArrayList<QuizQuestion> quizQuestions) {
+    public void setResults(ArrayList<QuizQuestion> quizQuestions) {
         this.results = quizQuestions;
     }
 

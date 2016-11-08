@@ -1,16 +1,23 @@
 package cs4720.cs4720finalproject.Model;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 
 /**
  * Created by liamj_000 on 11/7/2016.
  */
 public class QuizQuestion {
-
+    @SerializedName("category")
     private String category;
+    @SerializedName("type")
+    private String type;
+    @SerializedName("difficulty")
     private String difficulty;
+    @SerializedName("question")
     private String question;
+    @SerializedName("correct_answer")
     private String correctAnswer;
+    @SerializedName("incorrect_answers")
     private ArrayList<String> incorrectAnswers;
 
     public QuizQuestion(String category, String difficulty, String question, String correctAnswer, ArrayList<String> incorrectAnswers) {
@@ -23,6 +30,14 @@ public class QuizQuestion {
 
     public String getCategory() {
         return category;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getDifficulty() {
