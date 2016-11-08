@@ -9,4 +9,12 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="cs4720.cs4720finalproject.Activity.TriviaQuizActivity">
 
+    <TextView
+        android:layout_width="500dp"
+        android:layout_height="600dp"
+        android:text="New Text"
+        android:id="@+id/textView2"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp" />
 </RelativeLayout>

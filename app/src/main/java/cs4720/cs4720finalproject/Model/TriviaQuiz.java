@@ -9,6 +9,7 @@ import java.util.List;
  */
 public class TriviaQuiz {
 
+    // Defines what the variable is called in the parsed JSON object
     @SerializedName("results")
     private ArrayList<QuizQuestion> results;
 

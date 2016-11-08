@@ -10,6 +10,8 @@ import retrofit2.http.Query;
  * Created by liamj_000 on 11/7/2016.
  */
 public interface ApiInterface {
+
+    // Supposed to be used to get data from URL
     @GET("")
     Call<TriviaQuiz> getQuizQuestions();
 }

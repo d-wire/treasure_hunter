@@ -8,9 +8,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ApiClient {
 
+    //The base URL to get quiz questions from
     public static final String BASE_URL = "https://opentdb.com/api.php?amount=5";
+    // Create a new retrofit object to connect to URL
     private static Retrofit retrofit = null;
 
+    // Built in method to retrofit to connect to URL
     public static Retrofit getClient() {
         if (retrofit==null) {
             retrofit = new Retrofit.Builder()

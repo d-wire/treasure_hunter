@@ -19,6 +19,7 @@ public class FirstStartupActivity extends AppCompatActivity {
         editText = (EditText) findViewById(R.id.editText);
     }
 
+    // Button onClick method to save the username and profile icon to the local database
     public void saveToDB() {
         if(!editText.getText().equals("")) {
             username = editText.getText().toString();

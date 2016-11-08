@@ -7,6 +7,8 @@ import java.util.ArrayList;
  * Created by liamj_000 on 11/7/2016.
  */
 public class QuizQuestion {
+
+    //Defines what the variables are called in the parsed JSON object
     @SerializedName("category")
     private String category;
     @SerializedName("type")
