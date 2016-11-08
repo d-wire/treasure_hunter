@@ -1,6 +1,7 @@
-package cs4720.cs4720finalproject.Activity;
+package cs4720.cs4720finalproject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -63,7 +64,12 @@ public class FirstStartupActivity extends AppCompatActivity {
     public void saveLocally(String username) {
         sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        if(!editText.getText().equals("")) {
+            username = editText.getText().toString();
+        }
         editor.putString(usernameKey, username);
+        Intent intent = new Intent(this, TriviaQuizActivity.class); // Will be removed later. Just to show that the web service works
+        startActivity(intent); // Will be removed later. Just to show that the web service works
 
 //        if(!editText.getText().equals("")) {
 //            username = editText.getText().toString();
