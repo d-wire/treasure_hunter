@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -34,10 +36,24 @@ public class FirstStartupActivity extends AppCompatActivity {
         editText = (EditText) findViewById(R.id.editText);
         continueButton = (Button)findViewById(R.id.button);
 
+        // when user clicks on the "continue button," save necessary data locally
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveLocally(editText.toString());
+            }
+        });
+
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    Log.d("owen", "in");
+                    hideKeyboard();
+                }
+                Log.d("focus", String.valueOf(hasFocus));
+                Log.d("owen", "out");
+                hideKeyboard();
             }
         });
 
@@ -53,5 +69,10 @@ public class FirstStartupActivity extends AppCompatActivity {
 //            username = editText.getText().toString();
 //            User me = new User(username);
 //        }
+    }
+
+    public void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
 }
