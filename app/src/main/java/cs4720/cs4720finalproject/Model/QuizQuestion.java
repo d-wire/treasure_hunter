@@ -22,8 +22,9 @@ public class QuizQuestion {
     @SerializedName("incorrect_answers")
     private ArrayList<String> incorrectAnswers;
 
-    public QuizQuestion(String category, String difficulty, String question, String correctAnswer, ArrayList<String> incorrectAnswers) {
+    public QuizQuestion(String category, String type, String difficulty, String question, String correctAnswer, ArrayList<String> incorrectAnswers) {
         this.category = category;
+        this.type = type;
         this.difficulty = difficulty;
         this.question = question;
         this.correctAnswer = correctAnswer;
@@ -32,6 +33,10 @@ public class QuizQuestion {
 
     public String getCategory() {
         return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getType() {
@@ -72,5 +77,10 @@ public class QuizQuestion {
 
     public void setIncorrectAnswers(ArrayList<String> incorrectAnswers) {
         this.incorrectAnswers = incorrectAnswers;
+    }
+
+    public String toString() {
+        String questionStr = "Category: " + category + ", Type: " + type + ", Difficulty: " + difficulty + ", Question: " + question + ", Correct Answer: " + correctAnswer + ", Incorrect Answers: " + incorrectAnswers;
+        return questionStr;
     }
 }

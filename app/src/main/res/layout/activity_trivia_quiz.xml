@@ -7,14 +7,23 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="cs4720.cs4720finalproject.Activity.TriviaQuizActivity">
+    tools:context=".TriviaQuizActivity">
 
     <TextView
         android:layout_width="500dp"
-        android:layout_height="600dp"
+        android:layout_height="400dp"
         android:text="New Text"
         android:id="@+id/textView2"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="0dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reload"
+        android:id="@+id/button2"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="reload" />
 </RelativeLayout>
