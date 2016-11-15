@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ public class TriviaQuizActivity extends AppCompatActivity {
     private ArrayList<QuizQuestion> questions;
     private TextView textView;
 
+    private Button button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,8 +33,17 @@ public class TriviaQuizActivity extends AppCompatActivity {
 
         textView = (TextView) findViewById(R.id.textView2);
 
+        button = (Button)findViewById(R.id.newButton);
+        button.setOnClickListener(new View.OnClickListener() {
+                                      @Override
+                                      public void onClick(View v) {
+                                          Intent intent = new Intent(TriviaQuizActivity.this, MapsActivity.class);
+                                          startActivity(intent);
+                                      }
+                                  });
 
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
+                ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
         Call<TriviaQuiz> call = apiService.getQuizQuestions();
         call.enqueue(new Callback<TriviaQuiz>() {
