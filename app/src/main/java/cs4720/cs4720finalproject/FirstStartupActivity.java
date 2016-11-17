@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -75,43 +76,25 @@ public class FirstStartupActivity extends AppCompatActivity {
 
                                             }
                                         });
-
-//        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                if (!hasFocus) {
-//                    Log.d("owen", "in");
-//                    hideKeyboard();
-//                }
-//                Log.d("focus", String.valueOf(hasFocus));
-//                Log.d("owen", "out");
-//                hideKeyboard();
-//            }
-//        });
-
     }
 
     // Button onClick method to save the username and profile icon to the local database
     public void saveLocally(String username) {
         sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        if(!editText.getText().equals("")) {
+        //SharedPreferences.Editor editor = sharedPreferences.edit();
+        //if(!editText.getText().equals("")) {
             username = editText.getText().toString();
-        }
-        editor.putString(usernameKey, username);
-        Intent intent = new Intent(this, TriviaQuizActivity.class); // Will be removed later. Just to show that the web service works
+        //}
+
+        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().
+                putString(usernameKey, username).commit();
+
+        //editor.putString(usernameKey, username);
+        Intent intent = new Intent(this, HomePageActivity.class); // Will be removed later. Just to show that the web service works
         startActivity(intent); // Will be removed later. Just to show that the web service works
 
-//        if(!editText.getText().equals("")) {
-//            username = editText.getText().toString();
-//            User me = new User(username);
-//        }
     }
 
-//    public void hideKeyboard() {
-//        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-//        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-//    }
 
     public static void hideKeyboard(Activity activity) {
         View v = activity.getWindow().getCurrentFocus();
