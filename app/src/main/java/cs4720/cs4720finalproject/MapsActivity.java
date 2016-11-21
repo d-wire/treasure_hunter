@@ -1,6 +1,7 @@
 package cs4720.cs4720finalproject;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -8,6 +9,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -25,12 +28,28 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import cs4720.cs4720finalproject.Model.TreasureChest;
+import cs4720.cs4720finalproject.Model.TriviaQuiz;
+import cs4720.cs4720finalproject.Rest.ApiClient;
+import cs4720.cs4720finalproject.Rest.ApiInterface;
+import cs4720.cs4720finalproject.Model.QuizQuestion;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
     private GoogleMap mMap;
+    private ArrayList<TreasureChest> chestList = new ArrayList<TreasureChest>();
+    private ArrayList<QuizQuestion> quizQuestions;
+    private final int QUIZ_REQUEST = 1;
+
 
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
@@ -211,5 +230,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             // other 'case' lines to check for other permissions this app might request.
             // You can add here other case statements according to your requirement.
         }
+    }
+
+    public void startQuizActivity(View v) {
+        Intent intent = new Intent(MapsActivity.this, TriviaQuizActivity.class);
+        //Currently just for testing purposes. Will change to pass in the difficulty of the nearest treasure chest
+        intent.putExtra("Quiz Difficulty", "Easy");
+        startActivity(intent); //Might need to be startActivityForResult(intent, QUIZ_REQUEST)
     }
 }

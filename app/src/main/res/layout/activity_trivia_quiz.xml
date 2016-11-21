@@ -7,16 +7,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".TriviaQuizActivity">
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Reload"
-        android:id="@+id/button2"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="reload" />
+    tools:context=".TriviaQuizActivity"
+    android:background="@drawable/wood_background">
 
     <TextView
         android:layout_width="wrap_content"
@@ -25,7 +17,8 @@
         android:text="Medium Text"
         android:id="@+id/textView2"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textColor="#fffcfc" />
 
     <Button
         android:text="New Button"
@@ -34,7 +27,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="109dp"
         android:textColor="#FFFFFF"
-        android:textSize="30sp"
+        android:textSize="15sp"
 
         android:layout_width="270dp"
         android:layout_height="60dp"
@@ -42,6 +35,68 @@
         android:shadowColor="#A8A8A8"
         android:shadowDx="0"
         android:shadowDy="0"
-        android:shadowRadius="5"/>
+        android:shadowRadius="5"
+        android:layout_marginBottom="20dp"
+        android:onClick="recordResponse" />
+
+    <Button
+        android:text="New Button"
+        android:id="@+id/button2"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:layout_width="270dp"
+        android:layout_height="60dp"
+        android:background="@drawable/buttonshape"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5"
+        android:layout_below="@+id/newButton"
+        android:layout_alignStart="@+id/newButton"
+        android:layout_marginBottom="20dp"
+        android:onClick="recordResponse" />
+
+    <Button
+        android:text="New Button"
+        android:id="@+id/button3"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:layout_width="270dp"
+        android:layout_height="60dp"
+        android:background="@drawable/buttonshape"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5"
+        android:layout_below="@+id/button2"
+        android:layout_alignStart="@+id/button2"
+        android:layout_marginBottom="20dp"
+        android:onClick="recordResponse" />
+
+    <Button
+        android:text="New Button"
+        android:id="@+id/button4"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:layout_width="270dp"
+        android:layout_height="60dp"
+        android:background="@drawable/buttonshape"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5"
+        android:layout_below="@+id/button3"
+        android:layout_alignStart="@+id/button3"
+        android:onClick="recordResponse" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Quit"
+        android:id="@+id/button5"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:onClick="quit"/>
 
 </RelativeLayout>

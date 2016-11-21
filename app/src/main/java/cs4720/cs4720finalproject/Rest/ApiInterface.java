@@ -12,6 +12,12 @@ import retrofit2.http.Query;
 public interface ApiInterface {
 
     // Supposed to be used to get data from URL
-    @GET("api.php?amount=5")
-    Call<TriviaQuiz> getQuizQuestions();
+    @GET("api.php?amount=5&difficulty=easy")
+    Call<TriviaQuiz> getEasyQuizQuestions();
+
+    @GET("https://www.opentdb.com/api.php?amount=5&difficulty=medium")
+    Call<TriviaQuiz> getMediumQuizQuestions();
+
+    @GET("https://www.opentdb.com/api.php?amount=5&difficulty=hard")
+    Call<TriviaQuiz> getHardQuizQuestions();
 }

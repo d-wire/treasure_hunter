@@ -1,6 +1,11 @@
 package cs4720.cs4720finalproject.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -83,4 +88,36 @@ public class QuizQuestion {
         String questionStr = "Category: " + category + ", Type: " + type + ", Difficulty: " + difficulty + ", Question: " + question + ", Correct Answer: " + correctAnswer + ", Incorrect Answers: " + incorrectAnswers;
         return questionStr;
     }
+
+    /*public static final Parcelable.Creator<QuizQuestion> CREATOR = new Creator<QuizQuestion>() {
+        @Override
+        public QuizQuestion createFromParcel(Parcel source) {
+            QuizQuestion question = new QuizQuestion();
+            question.category = source.readString();
+            question.type = source.readString();
+            question.difficulty = source.readString();
+            question.question = source.readString();
+            question.correctAnswer = source.readString();
+            question.incorrectAnswers = source.readArrayList(QuizQuestion.class.getClassLoader());
+            return question;
+        }
+
+        @Override
+        public QuizQuestion[] newArray(int size) {
+            return new QuizQuestion[size];
+        }
+    };
+
+    public int describeContents() {
+        return 0;
+    }
+
+    public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeString(category);
+        parcel.writeString(type);
+        parcel.writeString(difficulty);
+        parcel.writeString(question);
+        parcel.writeString(correctAnswer);
+        parcel.writeList(incorrectAnswers);
+    }*/
 }
