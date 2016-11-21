@@ -1,0 +1,7 @@
+Since the previous milestone, we have added several important features:
+1. We have implemented a functioning google maps activity that loads up around the user's current location.
+2. We have fully implemented data storage of the user's defined username.
+3. We have fully implemented a quiz webservice with 3 endpoints corresponding to three different difficulties for the questions: "Easy", "Medium", and "Hard".
+4. We have added a quiz activity to handle the quiz objects returned from the web service and present them in a nice format that records the user's responses.
+5. We have added image overlays onto the google map of treasure chest objects that will correspond to quiz difficulties and associated loot.
+6. We have given the treasure chest image overlays weighted probabilites so that easy chests are more common than medium chests which are more common than hard chests.
