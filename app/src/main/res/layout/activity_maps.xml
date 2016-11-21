@@ -15,9 +15,10 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Quiz"
+        android:text="Accept Challenge"
         android:id="@+id/button"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="startQuizActivity"/>
+        android:onClick="startQuizActivity"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>

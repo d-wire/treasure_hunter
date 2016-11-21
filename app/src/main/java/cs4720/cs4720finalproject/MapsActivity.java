@@ -24,12 +24,16 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.GroundOverlay;
+import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import cs4720.cs4720finalproject.Model.TreasureChest;
 import cs4720.cs4720finalproject.Model.TriviaQuiz;
@@ -47,6 +51,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private ArrayList<TreasureChest> chestList = new ArrayList<TreasureChest>();
+    private ArrayList<GroundOverlay> overlays = new ArrayList<GroundOverlay>();
     private ArrayList<QuizQuestion> quizQuestions;
     private final int QUIZ_REQUEST = 1;
 
@@ -60,6 +65,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
@@ -87,7 +93,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //mMap.animateCamera(CameraUpdateFactory.zoomTo(15f));
         CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
         mMap.animateCamera(zoom);
+        double maxNorth = 38.070591;
+        double maxWest = -78.523636;
+        double maxSouth = 38.009584;
+        double maxEast = -78.446311;
+        // This line randomizes the number of chests that spawn to be between 10 and 25 (up for change)
+        int numberOfChests = ThreadLocalRandom.current().nextInt(10, 26);
+        for(int i = 0; i < numberOfChests; i++) {
+            Random r = new Random();
+            Random r2 = new Random();
+            double lat = maxSouth + (maxNorth - maxSouth) * r.nextDouble();
+            double lon = maxEast + (maxWest - maxEast) * r.nextDouble();
+            LatLng location = new LatLng(lat, lon);
+            int chestType = ThreadLocalRandom.current().nextInt(1, 11);
+            Log.d("Number", "" + chestType);
+            if(chestType >= 1 && chestType < 7) {
+                GroundOverlayOptions hardChest = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.easy_treasure_chest)).position(location, 500, 500);
+                GroundOverlay overlay = googleMap.addGroundOverlay(hardChest);
+                overlays.add(overlay);
+            }
+            else if(chestType >= 7 && chestType < 10) {
+                GroundOverlayOptions hardChest = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.medium_treasure_chest)).position(location, 500, 500);
+                GroundOverlay overlay = googleMap.addGroundOverlay(hardChest);
+                overlays.add(overlay);
+            }
+            else if(chestType == 10) {
+                GroundOverlayOptions hardChest = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.hard_treasure_chest)).position(location, 500, 500);
+                GroundOverlay overlay = googleMap.addGroundOverlay(hardChest);
+                overlays.add(overlay);
+            }
 
+
+        }
         //Initialize Google Play Services
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
