@@ -48,7 +48,10 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity android:name=".HomePageActivity" />
-        <activity android:name=".TabActivity"></activity>
+        <activity android:name=".TabActivity" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".QuizCompleteActivity" />
+        <activity android:name=".QuizFailedActivity"></activity>
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package cs4720.cs4720finalproject;
 
+import android.app.Activity;
 import  android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,7 +12,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import cs4720.cs4720finalproject.Model.EasyTreasureChest;
 import cs4720.cs4720finalproject.Model.QuizQuestion;
+import cs4720.cs4720finalproject.Model.TreasureChest;
 import cs4720.cs4720finalproject.Model.TriviaQuiz;
 import cs4720.cs4720finalproject.Rest.ApiClient;
 import cs4720.cs4720finalproject.Rest.ApiInterface;
@@ -27,6 +30,10 @@ public class TriviaQuizActivity extends AppCompatActivity {
     private int quizQuestionCounter = 0;
     private ArrayList<Button> buttons = new ArrayList<Button>();
     private ArrayList<Boolean> responses = new ArrayList<Boolean>();
+    private TreasureChest chest;
+    private static final int QUIZ_SUCCESS = 2;
+    private static final int QUIZ_FAILED = 3;
+
 
     private Button button1;
     private Button button2;
@@ -50,8 +57,15 @@ public class TriviaQuizActivity extends AppCompatActivity {
         button4 = (Button) findViewById(R.id.button4);
         buttons.add(button4);
 
+        for(int i = 0; i < buttons.size(); i++) {
+            buttons.get(i).setVisibility(View.GONE);
+        }
+
         Intent intent = getIntent();
         String difficulty = intent.getStringExtra("Quiz Difficulty");
+        Bundle bundle = intent.getBundleExtra("sent chest");
+        chest = (EasyTreasureChest) bundle.getSerializable("chest");
+
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         if(difficulty.equals("Easy")) {
             Call<TriviaQuiz> call = apiService.getEasyQuizQuestions();
@@ -108,16 +122,53 @@ public class TriviaQuizActivity extends AppCompatActivity {
     public void recordResponse(View v) {
         if(quizQuestionCounter >= (questions.size())) {
             //Will be replaced with starting quiz complete activity
-            Log.d("Complete", "Quiz finished");
-        }
-        else {
             Button btn = (Button) v;
-            String correctAnswer = questions.get(quizQuestionCounter).getCorrectAnswer();
+            String correctAnswer = questions.get(quizQuestionCounter - 1).getCorrectAnswer();
+            Log.d("btn", "" + btn.getText());
+            Log.d("correct answer", "" + correctAnswer);
             if(btn.getText().equals(correctAnswer)) {
                 responses.add(true);
             }
             else {
                 responses.add(false);
+            }
+            int counter = 0;
+            for(int i = 0; i < responses.size(); i++) {
+                if(responses.get(i) == true) {
+                    counter += 1;
+                }
+            }
+            Log.d("Complete", "Quiz finished: " + counter);
+            Log.d("Counter", "" + responses);
+            if(counter >= 3) {
+                Intent nextActivity = new Intent(TriviaQuizActivity.this, QuizCompleteActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("chest", chest);
+                nextActivity.putExtra("sent chest", bundle);
+                startActivityForResult(nextActivity, QUIZ_SUCCESS);
+            }
+            else {
+                Intent nextActivity = new Intent(TriviaQuizActivity.this, QuizFailedActivity.class);
+                startActivityForResult(nextActivity, QUIZ_FAILED);
+            }
+
+            /*Intent returnIntent = new Intent();
+            setResult(Activity.RESULT_OK, returnIntent);
+            finish();*/
+        }
+        else {
+            Button btn = (Button) v;
+            String correctAnswer = questions.get(quizQuestionCounter - 1).getCorrectAnswer();
+            Log.d("btn", "" + btn.getText());
+            Log.d("correct answer", "" + correctAnswer);
+            if(btn.getText().equals(correctAnswer)) {
+                responses.add(true);
+            }
+            else {
+                responses.add(false);
+            }
+            for(int i = 0; i < buttons.size(); i++) {
+                buttons.get(i).setVisibility(View.GONE);
             }
             nextQuestion();
         }
@@ -130,6 +181,7 @@ public class TriviaQuizActivity extends AppCompatActivity {
         questionText = questionText.replace("&amp;", "&");
         ArrayList<String> answers = questions.get(quizQuestionCounter).getIncorrectAnswers();
         answers.add(questions.get(quizQuestionCounter).getCorrectAnswer());
+        Log.d("Answers", "" + answers);
         for(int i = 0; i < answers.size(); i++) {
             answers.get(i).replace("&quot;", "\"");
             answers.get(i).replace("&#039;", "'");
@@ -138,18 +190,30 @@ public class TriviaQuizActivity extends AppCompatActivity {
         questionBody.setText(questionText);
         Collections.shuffle(answers);
         for(int i = 0; i < answers.size(); i++) {
+            buttons.get(i).setVisibility(View.VISIBLE);
             buttons.get(i).setText(answers.get(i));
         }
-        if(answers.size() < buttons.size()) {
-            for(int i = buttons.size() - answers.size(); i < buttons.size(); i++) {
+        /*if(answers.contains("True") && answers.contains("False")) {
+            for(int i = 2; i < 5; i++) {
                 buttons.get(i).setVisibility(View.INVISIBLE);
             }
-        }
+        }*/
         quizQuestionCounter += 1;
     }
 
     public void quit(View v) {
         finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == QUIZ_SUCCESS || requestCode == QUIZ_FAILED) {
+            if(resultCode == Activity.RESULT_OK) {
+                Intent intent = new Intent();
+                setResult(Activity.RESULT_OK, intent);
+                finish();
+            }
+        }
     }
 
 }

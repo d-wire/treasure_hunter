@@ -1,45 +1,32 @@
 package cs4720.cs4720finalproject.Model;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 
 /**
  * Created by liamj_000 on 11/20/2016.
  */
 public class EasyTreasureChest implements TreasureChest {
-    private final float longitude;
-    private final float latitude;
-    private ArrayList<Item> itemList;
-    private String difficulty;
+    private final transient LatLng latLng;
+    private ArrayList<String> itemList = new ArrayList<String>();
+    private static final long serialVersionUID = 41325434623564L;
 
-    public EasyTreasureChest(float longitude, float latitude, ArrayList<Item> itemList, String difficulty) {
-        this.longitude = longitude;
-        this.latitude = latitude;
-        this.itemList = itemList;
-        this.difficulty = difficulty;
+    public EasyTreasureChest(LatLng latLng) {
+        this.latLng = latLng;
     }
 
-
-    public String getDifficulty() {
-        return difficulty;
+    public boolean addItem(String item) {
+        this.itemList.add(item);
+        return true;
     }
 
-    public boolean addItem(Item item) {
-        if(!this.itemList.contains(item)) {
-            this.itemList.add(item);
-            return true;
-        }
-        return false;
-    }
-
-    public ArrayList<Item> getItemList() {
+    public ArrayList<String> getItemList() {
         return itemList;
     }
 
-    public float getLongitude() {
-        return longitude;
-    }
 
-    public float getLatitude() {
-        return latitude;
+    public LatLng getLatLng() {
+        return latLng;
     }
 }
