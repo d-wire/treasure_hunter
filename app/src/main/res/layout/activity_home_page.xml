@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_home_page"
     android:layout_width="match_parent"
@@ -8,7 +9,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="cs4720.cs4720finalproject.HomePageActivity">
+    tools:context="cs4720.cs4720finalproject.HomePageActivity"
+    android:background="@drawable/wood_background">
 
     <Button
         android:text="Map"
@@ -20,9 +22,43 @@
 
     <TextView
         android:text="TextView"
+        android:textSize="30dp"
+        android:textColor="@android:color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginTop="22dp"
         android:id="@+id/username" />
+
+    <TextView
+        android:text="Direction"
+        android:textColor="@android:color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/username"
+
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="22dp"
+        android:textSize="26dp"
+        android:id="@+id/direction" />
+
+    <TextView
+        android:text="TextView"
+        android:textColor="@android:color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/direction"
+        android:layout_toEndOf="@+id/direction"
+        android:layout_marginStart="10dp"
+        android:textSize="26dp"
+        android:id="@+id/orientation" />
+
+    <ImageButton
+        android:layout_width="120dp"
+        android:layout_height="100dp"
+        app:srcCompat="@android:color/background_light"
+        android:layout_alignTop="@+id/username"
+        android:id="@+id/icon"
+        android:layout_alignStart="@+id/googleMapsButton" />
+
 </RelativeLayout>

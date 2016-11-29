@@ -23,6 +23,9 @@ public class FirstStartupActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
 
+    // Use to determine which icon image the user has selected
+
+
     public static final String MyPREFERENCES = "MyPrefs" ;
     public static final String usernameKey = "usernameKey";
     public static final String iconKey = "iconKey";
@@ -33,6 +36,7 @@ public class FirstStartupActivity extends AppCompatActivity {
     private ImageButton imageButton3;
 
     private String username;
+    private int imageSelected = 0;
     private Button continueButton;
 
     @Override
@@ -59,23 +63,40 @@ public class FirstStartupActivity extends AppCompatActivity {
         imageButton1.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
-
+                                                chooseImageSelected(1);
                                             }
                                         });
 
         imageButton2.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
-
+                                                chooseImageSelected(2);
                                             }
                                         });
 
         imageButton3.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
-
+                                                chooseImageSelected(3);
                                             }
                                         });
+    }
+
+    public void chooseImageSelected(int imagePressed) {
+        imageSelected = imagePressed;
+        if (imagePressed == 1) {
+            imageButton1.setBackgroundResource(R.drawable.border);
+            imageButton2.setBackgroundResource(0);
+            imageButton3.setBackgroundResource(0);
+        } else if (imagePressed == 2) {
+            imageButton1.setBackgroundResource(0);
+            imageButton2.setBackgroundResource(R.drawable.border);
+            imageButton3.setBackgroundResource(0);
+        } else {
+            imageButton1.setBackgroundResource(0);
+            imageButton2.setBackgroundResource(0);
+            imageButton3.setBackgroundResource(R.drawable.border);
+        }
     }
 
     // Button onClick method to save the username and profile icon to the local database
@@ -87,11 +108,13 @@ public class FirstStartupActivity extends AppCompatActivity {
         //}
 
         PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().
-                putString(usernameKey, username).commit();
+                putString(usernameKey, username).
+                putString(iconKey, Integer.toString(imageSelected)).
+                commit();
 
         //editor.putString(usernameKey, username);
-        Intent intent = new Intent(this, HomePageActivity.class); // Will be removed later. Just to show that the web service works
-        startActivity(intent); // Will be removed later. Just to show that the web service works
+        Intent intent = new Intent(this, HomePageActivity.class);
+        startActivity(intent);
 
     }
 
