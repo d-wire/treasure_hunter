@@ -129,29 +129,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         //mMap.animateCamera(CameraUpdateFactory.zoomTo(15f));
-        CameraUpdate zoom = CameraUpdateFactory.zoomTo(0);
-        mMap.animateCamera(zoom);
+        CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
+        mMap.moveCamera(zoom);
+        //mMap.setMinZoomPreference(15);
 
         //Test chest
-        LatLng testLocation = new LatLng(38.272675, -77.731391);
-        GroundOverlayOptions testChest = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.easy_treasure_chest)).position(testLocation, 50, 50);
-        GroundOverlay testOverlay = googleMap.addGroundOverlay(testChest);
-        overlays.add(testOverlay);
-        EasyTreasureChest testChest1 = new EasyTreasureChest(testLocation);
-        //int testItemIndex1 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size() - 1);
-        //int testItemIndex2 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size() - 1);
-        //int testItemIndex3 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size() - 1);
-        testChest1.addItem(possibleEasyItems.get(0));
-        testChest1.addItem(possibleEasyItems.get(0));
-        testChest1.addItem(possibleEasyItems.get(0));
-        chestList.add(testChest1);
+//        LatLng testLocation = new LatLng(38.272675, -77.731391);
+//        GroundOverlayOptions testChest = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.easy_treasure_chest)).position(testLocation, 50, 50);
+//        GroundOverlay testOverlay = googleMap.addGroundOverlay(testChest);
+//        overlays.add(testOverlay);
+//        EasyTreasureChest testChest1 = new EasyTreasureChest(testLocation);
+//        //int testItemIndex1 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size() - 1);
+//        //int testItemIndex2 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size() - 1);
+//        //int testItemIndex3 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size() - 1);
+//        testChest1.addItem(possibleEasyItems.get(0));
+//        testChest1.addItem(possibleEasyItems.get(0));
+//        testChest1.addItem(possibleEasyItems.get(0));
+//        chestList.add(testChest1);
 
         double maxNorth = 38.070591;
         double maxWest = -78.523636;
         double maxSouth = 38.009584;
         double maxEast = -78.446311;
         // This line randomizes the number of chests that spawn to be between 10 and 25 (up for change)
-        int numberOfChests = ThreadLocalRandom.current().nextInt(10, 26);
+        int numberOfChests = ThreadLocalRandom.current().nextInt(50, 101);
         for(int i = 0; i < numberOfChests; i++) {
             Random r = new Random();
             Random r2 = new Random();
@@ -161,7 +162,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             int chestType = ThreadLocalRandom.current().nextInt(1, 11);
             Log.d("Number", "" + chestType);
             if(chestType >= 1 && chestType < 7) {
-                GroundOverlayOptions easyChest = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.easy_treasure_chest)).position(location, 500, 500);
+                GroundOverlayOptions easyChest = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.easy_treasure_chest)).position(location, 100, 100);
                 GroundOverlay overlay = googleMap.addGroundOverlay(easyChest);
                 overlays.add(overlay);
                 EasyTreasureChest chest1 = new EasyTreasureChest(location);
@@ -174,7 +175,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 chestList.add(chest1);
             }
             else if(chestType >= 7 && chestType < 10) {
-                GroundOverlayOptions mediumChest = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.medium_treasure_chest)).position(location, 500, 500);
+                GroundOverlayOptions mediumChest = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.medium_treasure_chest)).position(location, 100, 100);
                 GroundOverlay overlay = googleMap.addGroundOverlay(mediumChest);
                 overlays.add(overlay);
                 MediumTreasureChest chest2 = new MediumTreasureChest(location);
@@ -187,7 +188,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 chestList.add(chest2);
             }
             else if(chestType == 10) {
-                GroundOverlayOptions hardChest = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.hard_treasure_chest)).position(location, 500, 500);
+                GroundOverlayOptions hardChest = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.hard_treasure_chest)).position(location, 100, 100);
                 GroundOverlay overlay = googleMap.addGroundOverlay(hardChest);
                 overlays.add(overlay);
                 HardTreasureChest chest3 = new HardTreasureChest(location);
