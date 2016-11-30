@@ -68,7 +68,7 @@ public class TriviaQuizActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String difficulty = intent.getStringExtra("Quiz Difficulty");
         Bundle bundle = intent.getBundleExtra("sent chest");
-        chest = (EasyTreasureChest) bundle.getSerializable("chest");
+        chest = (TreasureChest) bundle.getSerializable("chest");
 
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         if(difficulty.equals("Easy")) {

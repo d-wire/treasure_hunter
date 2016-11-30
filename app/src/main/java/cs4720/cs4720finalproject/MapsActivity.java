@@ -81,6 +81,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     LocationRequest mLocationRequest;
     Location mCurrentLocation;
     Circle detectionRadius;
+    private Boolean mRequestingLocationUpdates = false;
+    private boolean firstLoad = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +116,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         // Trying to check if this is the first launch of the activity. May not work
-        if(first_launch == true) {
+        if (first_launch == true) {
             mapFragment.getMapAsync(this);
             first_launch = false;
         }
@@ -153,13 +155,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         testChest1.addItem(possibleEasyItems.get(0));
         chestList.add(testChest1);
 
+        LatLng testLocation2 = new LatLng(38.032243, -78.511828);
+        GroundOverlayOptions testChest2 = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.medium_treasure_chest)).position(testLocation2, 50, 50);
+        GroundOverlay testOverlay2 = googleMap.addGroundOverlay(testChest2);
+        overlays.add(testOverlay2);
+        MediumTreasureChest testChest3 = new MediumTreasureChest(testLocation2);
+        //int testItemIndex1 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size() - 1);
+        //int testItemIndex2 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size() - 1);
+        //int testItemIndex3 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size() - 1);
+        testChest3.addItem(possibleMediumItems.get(0));
+        testChest3.addItem(possibleMediumItems.get(0));
+        testChest3.addItem(possibleMediumItems.get(0));
+        chestList.add(testChest3);
+
         double maxNorth = 38.070591;
         double maxWest = -78.523636;
         double maxSouth = 38.009584;
         double maxEast = -78.446311;
         // This line randomizes the number of chests that spawn to be between 10 and 25 (up for change)
         int numberOfChests = ThreadLocalRandom.current().nextInt(50, 101);
-        for(int i = 0; i < numberOfChests; i++) {
+        for (int i = 0; i < numberOfChests; i++) {
             Random r = new Random();
             Random r2 = new Random();
             double lat = maxSouth + (maxNorth - maxSouth) * r.nextDouble();
@@ -167,7 +182,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LatLng location = new LatLng(lat, lon);
             int chestType = ThreadLocalRandom.current().nextInt(1, 11);
             Log.d("Number", "" + chestType);
-            if(chestType >= 1 && chestType < 7) {
+            if (chestType >= 1 && chestType < 7) {
                 GroundOverlayOptions easyChest = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.easy_treasure_chest)).position(location, 100, 100);
                 GroundOverlay overlay = googleMap.addGroundOverlay(easyChest);
                 overlays.add(overlay);
@@ -179,8 +194,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 //chest1.addItem(possibleEasyItems.get(itemIndex2));
                 //chest1.addItem(possibleEasyItems.get(itemIndex3));
                 chestList.add(chest1);
-            }
-            else if(chestType >= 7 && chestType < 10) {
+            } else if (chestType >= 7 && chestType < 10) {
                 GroundOverlayOptions mediumChest = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.medium_treasure_chest)).position(location, 100, 100);
                 GroundOverlay overlay = googleMap.addGroundOverlay(mediumChest);
                 overlays.add(overlay);
@@ -192,8 +206,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //                chest2.addItem(possibleMediumItems.get(itemIndex2));
 //                chest2.addItem(possibleMediumItems.get(itemIndex3));
                 chestList.add(chest2);
-            }
-            else if(chestType == 10) {
+            } else if (chestType == 10) {
                 GroundOverlayOptions hardChest = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.hard_treasure_chest)).position(location, 100, 100);
                 GroundOverlay overlay = googleMap.addGroundOverlay(hardChest);
                 overlays.add(overlay);
@@ -217,8 +230,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 buildGoogleApiClient();
                 mMap.setMyLocationEnabled(true);
             }
-        }
-        else {
+        } else {
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
         }
@@ -248,6 +260,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            mRequestingLocationUpdates = true;
         }
 
     }
@@ -264,30 +277,44 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (mCurrLocationMarker != null) {
             mCurrLocationMarker.remove();
         }
-        if(detectionRadius != null) {
+        if (detectionRadius != null) {
             detectionRadius.remove();
         }
-        for(int i = 0; i < chestList.size() - 1; i++) {
-            double tempDist = calculate_distance(location, chestList.get(i).getLatLng());
+        CircleOptions options = new CircleOptions();
+        LatLng ltLn = new LatLng(location.getLatitude(), location.getLongitude());
+        options.center(ltLn);
+        options.radius(75);
+        options.fillColor(R.color.colorPrimary);
+        detectionRadius = mMap.addCircle(options);
+
+        for (int i = 0; i < chestList.size() - 1; i++) {
+            double tempDist = calculate_distance(detectionRadius.getCenter(), chestList.get(i).getLatLng());
             // May need to be changed
-            if(tempDist <= 4) {
+            Log.d("All chests", "" + tempDist);
+            if(tempDist < 7) {
+                Log.d("Other chests?", "" + tempDist);
+            }
+            if (tempDist <= 6 && !closeChests.contains(chestList.get(i))) {
+                Log.d("Close chest", "" + tempDist);
                 closeChests.add(chestList.get(i));
+                chestList.remove(i);
             }
         }
+
+        /*for(int i = 0; i < closeChests.size() - 1; i++) {
+            if()
+        }*/
         // Make accept challenge button visible when chests are nearby
-        if((closeChests.size()) > 0) {
-            if(closeChests.get(0) instanceof EasyTreasureChest) {
+        if ((closeChests.size()) > 0) {
+            if (closeChests.get(0) instanceof EasyTreasureChest) {
                 acceptChallenge.setText("Accept Easy Challenge");
-            }
-            else if(closeChests.get(0) instanceof MediumTreasureChest) {
+            } else if (closeChests.get(0) instanceof MediumTreasureChest) {
                 acceptChallenge.setText("Accept Medium Challenge");
-            }
-            else if(closeChests.get(0) instanceof HardTreasureChest) {
+            } else if (closeChests.get(0) instanceof HardTreasureChest) {
                 acceptChallenge.setText("Accept Hard Challenge");
             }
             acceptChallenge.setVisibility(View.VISIBLE);
-        }
-        else if(closeChests.size() == 0) {
+        } else if (closeChests.size() <= 0) {
             acceptChallenge.setVisibility(View.INVISIBLE);
         }
         //Place current location marker
@@ -297,16 +324,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         markerOptions.title("Current Position");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
         mCurrLocationMarker = mMap.addMarker(markerOptions);
-        CircleOptions options = new CircleOptions();
-        LatLng ltLn = new LatLng(location.getLatitude(), location.getLongitude());
-        options.center(ltLn);
-        options.radius(75);
-        options.fillColor(R.color.colorPrimary);
-        detectionRadius = mMap.addCircle(options);
 
         //move map camera
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        if(firstLoad) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            firstLoad = false;
+        }
+        //mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
         //stop location updates
         /*if (mGoogleApiClient != null) {
@@ -315,16 +339,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    public double calculate_distance(Location location, LatLng latLng) {
-        double R = 3961;
-        double lat1 = location.getLatitude();
-        double lon1 = location.getLongitude();
+    public double calculate_distance(LatLng location, LatLng latLng) {
+        double R = 6373;
+        double lat1 = location.latitude;
+        double lon1 = location.longitude;
         double lat2 = latLng.latitude;
         double lon2 = latLng.longitude;
         double dlon = lon2 - lon1;
         double dlat = lat2 - lat1;
-        double a = Math.pow(Math.sin(dlat/2), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(dlon/2), 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double a = Math.pow(Math.sin(dlat / 2), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(dlon / 2), 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         double d = R * c;
         return d;
     }
@@ -335,7 +359,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-    public boolean checkLocationPermission(){
+
+    public boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -404,17 +429,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Intent intent = new Intent(MapsActivity.this, TriviaQuizActivity.class);
         Bundle bundle = new Bundle();
         //Currently just for testing purposes. Will change to pass in the difficulty of the nearest treasure chest
-        if(closeChests.get(0) instanceof EasyTreasureChest) {
+        if (closeChests.get(0) instanceof EasyTreasureChest) {
             intent.putExtra("Quiz Difficulty", "Easy");
             bundle.putSerializable("chest", closeChests.get(0));
             intent.putExtra("sent chest", bundle);
-        }
-        else if(closeChests.get(0) instanceof MediumTreasureChest) {
+        } else if (closeChests.get(0) instanceof MediumTreasureChest) {
             intent.putExtra("Quiz Difficulty", "Medium");
             bundle.putSerializable("chest", closeChests.get(0));
             intent.putExtra("sent chest", bundle);
-        }
-        else if(closeChests.get(0) instanceof HardTreasureChest) {
+        } else if (closeChests.get(0) instanceof HardTreasureChest) {
             intent.putExtra("Quiz Difficulty", "Medium");
             bundle.putSerializable("chest", closeChests.get(0));
             intent.putExtra("sent chest", bundle);
@@ -429,18 +452,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == QUIZ_REQUEST) {
-            if(resultCode == Activity.RESULT_OK) {
-                for(int i = 0; i < overlays.size() - 1; i++) {
-                    if(overlays.get(i).getPosition().equals(closeChests.get(0).getLatLng())) {
+        if (requestCode == QUIZ_REQUEST) {
+            if (resultCode == Activity.RESULT_OK) {
+                for (int i = 0; i < overlays.size() - 1; i++) {
+                    if (overlays.get(i).getPosition().equals(closeChests.get(0).getLatLng())) {
                         overlays.get(i).remove();
                         overlays.remove(i);
                     }
                 }
-                for(int i = 0; i < chestList.size() - 1; i++) {
-                    if(chestList.get(i).getLatLng().equals(closeChests.get(0).getLatLng())) {
+                for (int i = 0; i < chestList.size() - 1; i++) {
+                    if (chestList.get(i).getLatLng().equals(closeChests.get(0).getLatLng())) {
                         Log.d("Chest", "Chest removed");
-                        chestList.remove(chestList.get(i));
                     }
                 }
                 closeChests.remove(0);
@@ -448,4 +470,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
     }
-}
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mRequestingLocationUpdates) {
+            stopLocationUpdates();
+            mRequestingLocationUpdates = false;
+        }
+    }
+
+    protected void stopLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(
+                mGoogleApiClient, this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected() && !mRequestingLocationUpdates) {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                LocationServices.FusedLocationApi.requestLocationUpdates(
+                        mGoogleApiClient, mLocationRequest, this);
+                mRequestingLocationUpdates = true;
+            }
+            }
+        }
+    }

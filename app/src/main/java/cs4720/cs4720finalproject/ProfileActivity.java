@@ -34,9 +34,11 @@ public class ProfileActivity extends AppCompatActivity {
 
         SharedPreferences sharedPref = getSharedPreferences("items", Context.MODE_PRIVATE);
         allItems = sharedPref.getStringSet("key", null);
-        ArrayList<String> itemsAsList = new ArrayList<String>(allItems);
-        Log.d("Items", "" + itemsAsList);
-        grid.setAdapter(new ImageAdapter(this, itemsAsList));
+        if(allItems != null) {
+            ArrayList<String> itemsAsList = new ArrayList<String>(allItems);
+            Log.d("Items", "" + itemsAsList);
+            grid.setAdapter(new ImageAdapter(this, itemsAsList));
+        }
     }
 
     public class ImageAdapter extends BaseAdapter {
