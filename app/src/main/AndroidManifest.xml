@@ -21,7 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".FirstStartupActivity"
+            android:name=".FirstActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -51,7 +51,8 @@
         <activity android:name=".TabActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".QuizCompleteActivity" />
-        <activity android:name=".QuizFailedActivity"></activity>
+        <activity android:name=".QuizFailedActivity" />
+        <activity android:name=".FirstStartupActivity"></activity>
     </application>
 
 </manifest>

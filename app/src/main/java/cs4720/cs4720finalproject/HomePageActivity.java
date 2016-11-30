@@ -66,7 +66,7 @@ public class HomePageActivity extends AppCompatActivity implements SensorEventLi
             icon.setImageResource(R.drawable.profile_icon3);
         }
 
-        Log.d("Owen hello", iconNum);
+        //Log.d("Owen hello", iconNum);
 
         usernameView = (TextView)findViewById(R.id.username);
         usernameView.setText(username);
