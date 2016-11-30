@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import cs4720.cs4720finalproject.R;
 import cs4720.cs4720finalproject.Model.User;
@@ -56,7 +57,14 @@ public class FirstStartupActivity extends AppCompatActivity {
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveLocally(editText.toString());
+                if (!editText.getText().toString().equals("")) {
+                    Log.d("HELLO HELLO", editText.getText().toString());
+                    saveLocally(editText.toString());
+                } else {
+                    Toast.makeText(FirstStartupActivity.this, "Must enter username",
+                            Toast.LENGTH_LONG).show();
+                }
+
             }
         });
 
@@ -102,10 +110,7 @@ public class FirstStartupActivity extends AppCompatActivity {
     // Button onClick method to save the username and profile icon to the local database
     public void saveLocally(String username) {
         sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        //SharedPreferences.Editor editor = sharedPreferences.edit();
-        //if(!editText.getText().equals("")) {
             username = editText.getText().toString();
-        //}
 
         PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().
                 putString(usernameKey, username).
