@@ -1,7 +1,9 @@
 package cs4720.cs4720finalproject;
 
 import android.app.Activity;
+import android.content.Context;
 import  android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +13,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import cs4720.cs4720finalproject.Model.EasyTreasureChest;
 import cs4720.cs4720finalproject.Model.QuizQuestion;
@@ -140,17 +144,24 @@ public class TriviaQuizActivity extends AppCompatActivity {
             }
             Log.d("Complete", "Quiz finished: " + counter);
             Log.d("Counter", "" + responses);
-            if(counter >= 3) {
+            //if(counter >= 3) {
+                SharedPreferences sharedPref = getSharedPreferences("items", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                Set<String> itemList = new HashSet<String>();
+                itemList.addAll(chest.getItemList());
+                editor.putStringSet("key", itemList);
+                editor.commit();
+
                 Intent nextActivity = new Intent(TriviaQuizActivity.this, QuizCompleteActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("chest", chest);
                 nextActivity.putExtra("sent chest", bundle);
                 startActivityForResult(nextActivity, QUIZ_SUCCESS);
-            }
-            else {
-                Intent nextActivity = new Intent(TriviaQuizActivity.this, QuizFailedActivity.class);
-                startActivityForResult(nextActivity, QUIZ_FAILED);
-            }
+           // }
+            //else {
+                //Intent nextActivity = new Intent(TriviaQuizActivity.this, QuizFailedActivity.class);
+                //startActivityForResult(nextActivity, QUIZ_FAILED);
+           // }
 
             /*Intent returnIntent = new Intent();
             setResult(Activity.RESULT_OK, returnIntent);

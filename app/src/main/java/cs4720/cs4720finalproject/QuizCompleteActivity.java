@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,6 +43,7 @@ public class QuizCompleteActivity extends AppCompatActivity {
         Resources res = getResources();
         for(int i = 0; i < items.size(); i++) {
             int id = res.getIdentifier(items.get(i), "mipmap", QuizCompleteActivity.this.getPackageName());
+            Log.d("Correct ID", "" + id);
             imageViews.get(i).setBackgroundResource(id);
         }
 

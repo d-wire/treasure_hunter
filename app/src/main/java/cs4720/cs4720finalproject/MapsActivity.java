@@ -20,12 +20,15 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -67,6 +70,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<String> possibleMediumItems = new ArrayList<String>();
     private ArrayList<String> possibleHardItems = new ArrayList<String>();
     private static final int QUIZ_REQUEST = 1;
+    private static final int PROFILE_REQUEST = 0;
     private static boolean first_launch = true;
     private Button acceptChallenge;
 
@@ -75,6 +79,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Location mLastLocation;
     Marker mCurrLocationMarker;
     LocationRequest mLocationRequest;
+    Location mCurrentLocation;
+    Circle detectionRadius;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,23 +135,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         //mMap.animateCamera(CameraUpdateFactory.zoomTo(15f));
-        CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
-        mMap.moveCamera(zoom);
-        //mMap.setMinZoomPreference(15);
+        //CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
+        //mMap.moveCamera(zoom);
+        mMap.setMinZoomPreference(15);
 
         //Test chest
-//        LatLng testLocation = new LatLng(38.272675, -77.731391);
-//        GroundOverlayOptions testChest = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.easy_treasure_chest)).position(testLocation, 50, 50);
-//        GroundOverlay testOverlay = googleMap.addGroundOverlay(testChest);
-//        overlays.add(testOverlay);
-//        EasyTreasureChest testChest1 = new EasyTreasureChest(testLocation);
-//        //int testItemIndex1 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size() - 1);
-//        //int testItemIndex2 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size() - 1);
-//        //int testItemIndex3 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size() - 1);
-//        testChest1.addItem(possibleEasyItems.get(0));
-//        testChest1.addItem(possibleEasyItems.get(0));
-//        testChest1.addItem(possibleEasyItems.get(0));
-//        chestList.add(testChest1);
+        LatLng testLocation = new LatLng(38.031611, -78.510728);
+        GroundOverlayOptions testChest = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.easy_treasure_chest)).position(testLocation, 50, 50);
+        GroundOverlay testOverlay = googleMap.addGroundOverlay(testChest);
+        overlays.add(testOverlay);
+        EasyTreasureChest testChest1 = new EasyTreasureChest(testLocation);
+        //int testItemIndex1 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size() - 1);
+        //int testItemIndex2 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size() - 1);
+        //int testItemIndex3 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size() - 1);
+        testChest1.addItem(possibleEasyItems.get(0));
+        testChest1.addItem(possibleEasyItems.get(0));
+        testChest1.addItem(possibleEasyItems.get(0));
+        chestList.add(testChest1);
 
         double maxNorth = 38.070591;
         double maxWest = -78.523636;
@@ -236,6 +242,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mLocationRequest.setInterval(1000);
         mLocationRequest.setFastestInterval(1000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(mLocationRequest);
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -256,10 +264,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (mCurrLocationMarker != null) {
             mCurrLocationMarker.remove();
         }
+        if(detectionRadius != null) {
+            detectionRadius.remove();
+        }
         for(int i = 0; i < chestList.size() - 1; i++) {
             double tempDist = calculate_distance(location, chestList.get(i).getLatLng());
             // May need to be changed
-            if(tempDist <= 5) {
+            if(tempDist <= 4) {
                 closeChests.add(chestList.get(i));
             }
         }
@@ -286,15 +297,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         markerOptions.title("Current Position");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
         mCurrLocationMarker = mMap.addMarker(markerOptions);
+        CircleOptions options = new CircleOptions();
+        LatLng ltLn = new LatLng(location.getLatitude(), location.getLongitude());
+        options.center(ltLn);
+        options.radius(75);
+        options.fillColor(R.color.colorPrimary);
+        detectionRadius = mMap.addCircle(options);
 
         //move map camera
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
         //stop location updates
-        if (mGoogleApiClient != null) {
+        /*if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-        }
+        }*/
 
     }
 
@@ -405,6 +422,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         startActivityForResult(intent, QUIZ_REQUEST); //Might need to be startActivityForResult(intent, QUIZ_REQUEST)
     }
 
+    public void openProfile(View v) {
+        Intent intent = new Intent(MapsActivity.this, ProfileActivity.class);
+        startActivityForResult(intent, PROFILE_REQUEST);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == QUIZ_REQUEST) {
@@ -413,6 +435,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     if(overlays.get(i).getPosition().equals(closeChests.get(0).getLatLng())) {
                         overlays.get(i).remove();
                         overlays.remove(i);
+                    }
+                }
+                for(int i = 0; i < chestList.size() - 1; i++) {
+                    if(chestList.get(i).getLatLng().equals(closeChests.get(0).getLatLng())) {
+                        Log.d("Chest", "Chest removed");
+                        chestList.remove(chestList.get(i));
                     }
                 }
                 closeChests.remove(0);
