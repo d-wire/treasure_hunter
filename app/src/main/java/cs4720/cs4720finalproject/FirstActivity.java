@@ -18,7 +18,7 @@ public class FirstActivity extends AppCompatActivity {
                 getString(usernameKey, "defaultStringIfNothingFound");
 
         if (!username.equals("defaultStringIfNothingFound")) {
-            Intent intent = new Intent(this, HomePageActivity.class);
+            Intent intent = new Intent(this, MapsActivity.class);
             startActivity(intent);
         } else {
             Intent intent = new Intent(this, FirstStartupActivity.class);

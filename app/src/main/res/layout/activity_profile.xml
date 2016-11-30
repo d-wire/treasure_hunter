@@ -71,6 +71,7 @@
         android:id="@+id/gridView"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/textView8"
-        android:scrollbars="vertical"/>
+        android:scrollbars="vertical"
+        android:numColumns="4" />
 
 </RelativeLayout>

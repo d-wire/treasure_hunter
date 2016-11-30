@@ -11,9 +11,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import cs4720.cs4720finalproject.Model.EasyTreasureChest;
@@ -145,12 +150,35 @@ public class TriviaQuizActivity extends AppCompatActivity {
             Log.d("Complete", "Quiz finished: " + counter);
             Log.d("Counter", "" + responses);
             //if(counter >= 3) {
-                SharedPreferences sharedPref = getSharedPreferences("items", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                Set<String> itemList = new HashSet<String>();
-                itemList.addAll(chest.getItemList());
-                editor.putStringSet("key", itemList);
-                editor.commit();
+                TinyDB tinyDB = new TinyDB(getApplicationContext());
+                ArrayList<String> items = tinyDB.getListString("allItems");
+                if(items != null) {
+                    items.addAll(chest.getItemList());
+                    tinyDB.putListString("allItems", items);
+                }
+                else {
+                    tinyDB.putListString("allItems", chest.getItemList());
+                }
+                /*SharedPreferences readSharedPref = getSharedPreferences("items", Context.MODE_PRIVATE);
+                Gson gson = new Gson();
+                String json = readSharedPref.getString("key", null);
+                Type type = new TypeToken<ArrayList<String>>() {}.getType();
+                ArrayList<String> allItems = gson.fromJson(json, type);
+                Log.d("All items", "" + allItems);
+                if(allItems != null) {
+                    ArrayList<String> chestItems = chest.getItemList();
+                    allItems.addAll(chestItems);
+                    String json2 = gson.toJson(allItems);
+                    SharedPreferences.Editor editor = readSharedPref.edit();
+                    editor.putString("key", json);
+                    editor.commit();
+                }
+                else {
+                    String json2 = gson.toJson(chest.getItemList());
+                    SharedPreferences.Editor editor = readSharedPref.edit();
+                    editor.putString("key", json);
+                    editor.commit();
+                }*/
 
                 Intent nextActivity = new Intent(TriviaQuizActivity.this, QuizCompleteActivity.class);
                 Bundle bundle = new Bundle();
@@ -225,6 +253,10 @@ public class TriviaQuizActivity extends AppCompatActivity {
                 finish();
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 
 }

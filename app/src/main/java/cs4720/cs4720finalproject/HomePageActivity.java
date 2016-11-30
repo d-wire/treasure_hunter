@@ -1,7 +1,10 @@
 package cs4720.cs4720finalproject;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Sensor;
@@ -12,12 +15,21 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 import static cs4720.cs4720finalproject.R.id.imageButton;
 
@@ -30,6 +42,7 @@ public class HomePageActivity extends AppCompatActivity implements SensorEventLi
     private TextView usernameView;
     private TextView direction;
     private ImageButton icon;
+    private GridView grid;
 
     // record the compass picture angle turned
     private float currentDegree = 0f;
@@ -79,8 +92,9 @@ public class HomePageActivity extends AppCompatActivity implements SensorEventLi
         GoogleMapsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomePageActivity.this, MapsActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent();
+                setResult(Activity.RESULT_OK, intent);
+                finish();
             }
         });
 
@@ -88,6 +102,17 @@ public class HomePageActivity extends AppCompatActivity implements SensorEventLi
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+
+        //Populate gridview with items
+        grid = (GridView) findViewById(R.id.gridView2);
+
+        TinyDB tinyDB = new TinyDB(getApplicationContext());
+        ArrayList<String> allItems = tinyDB.getListString("allItems");
+        if(allItems != null) {
+            Log.d("Items", "" + allItems);
+            Collections.sort(allItems);
+            grid.setAdapter(new ImageAdapter(this, allItems, grid));
+        }
     }
 
     // Use the value from the accelerometer to set the direction. 8 cardinal directions. maybe change to 4
@@ -162,5 +187,59 @@ public class HomePageActivity extends AppCompatActivity implements SensorEventLi
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
+    }
+
+    public class ImageAdapter extends BaseAdapter {
+
+        private Context context;
+        private ArrayList<String> items;
+        private GridView grid;
+
+        public ImageAdapter(Context context, ArrayList<String> items, GridView grid) {
+            this.context = context;
+            this.items = items;
+            this.grid = grid;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            //ImageView imageView = new ImageView(context);
+            ImageView imageView;
+            if (convertView == null) {
+                imageView = new ImageView(context);
+                imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                imageView.setLayoutParams(new GridView.LayoutParams(200, 200));
+                imageView.setAdjustViewBounds(false);
+            } else {
+                imageView = (ImageView) convertView;
+            }
+            if(imageView != null) {
+                String item = items.get(position);
+                Resources res = getResources();
+                int id = res.getIdentifier(item, "mipmap", HomePageActivity.this.getPackageName());
+                imageView.setImageResource(id);
+                notifyDataSetChanged();
+            }
+            return imageView;
+        }
+
+        @Override
+        public int getCount() {
+            return items.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 }

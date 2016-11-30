@@ -3,6 +3,7 @@ package cs4720.cs4720finalproject;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +15,11 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -32,12 +37,11 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         grid = (GridView) findViewById(R.id.gridView);
 
-        SharedPreferences sharedPref = getSharedPreferences("items", Context.MODE_PRIVATE);
-        allItems = sharedPref.getStringSet("key", null);
+        TinyDB tinyDB = new TinyDB(getApplicationContext());
+        ArrayList<String> allItems = tinyDB.getListString("allItems");
         if(allItems != null) {
-            ArrayList<String> itemsAsList = new ArrayList<String>(allItems);
-            Log.d("Items", "" + itemsAsList);
-            grid.setAdapter(new ImageAdapter(this, itemsAsList));
+            Log.d("Items", "" + allItems);
+            grid.setAdapter(new ImageAdapter(this, allItems, grid));
         }
     }
 
@@ -45,23 +49,19 @@ public class ProfileActivity extends AppCompatActivity {
 
         private Context context;
         private ArrayList<String> items;
+        private GridView grid;
 
-        public ImageAdapter(Context context, ArrayList<String> items) {
+        public ImageAdapter(Context context, ArrayList<String> items, GridView grid) {
             this.context = context;
             this.items = items;
+            this.grid = grid;
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View gridView;
             ImageView imageView = new ImageView(context);
             if (convertView == null) {
-
-                gridView = new View(context);
-
-
-
                 String item = items.get(position);
 
                 Log.d("Selected item", item);
@@ -70,10 +70,10 @@ public class ProfileActivity extends AppCompatActivity {
                 int id = res.getIdentifier(item, "mipmap", ProfileActivity.this.getPackageName());
                 Log.d("ID", "" + id);
                 imageView.setImageResource(id);
-                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                imageView.setLayoutParams(new GridView.LayoutParams(150, 150));
+                imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                imageView.setLayoutParams(new GridView.LayoutParams(200, 200));
             } else {
-                gridView = (View) convertView;
+                imageView = (ImageView) convertView;
             }
             return imageView;
         }

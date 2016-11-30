@@ -137,9 +137,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         //mMap.animateCamera(CameraUpdateFactory.zoomTo(15f));
-        //CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
-        //mMap.moveCamera(zoom);
-        mMap.setMinZoomPreference(15);
+        CameraUpdate zoom = CameraUpdateFactory.zoomTo(16);
+        mMap.moveCamera(zoom);
+        mMap.setMinZoomPreference(14);
 
         //Test chest
         LatLng testLocation = new LatLng(38.031611, -78.510728);
@@ -155,7 +155,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         testChest1.addItem(possibleEasyItems.get(0));
         chestList.add(testChest1);
 
-        LatLng testLocation2 = new LatLng(38.032243, -78.511828);
+        LatLng testLocation2 = new LatLng(38.029055, -78.509931);
         GroundOverlayOptions testChest2 = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.medium_treasure_chest)).position(testLocation2, 50, 50);
         GroundOverlay testOverlay2 = googleMap.addGroundOverlay(testChest2);
         overlays.add(testOverlay2);
@@ -183,7 +183,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             int chestType = ThreadLocalRandom.current().nextInt(1, 11);
             Log.d("Number", "" + chestType);
             if (chestType >= 1 && chestType < 7) {
-                GroundOverlayOptions easyChest = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.easy_treasure_chest)).position(location, 100, 100);
+                GroundOverlayOptions easyChest = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.easy_treasure_chest)).position(location, 50, 50);
                 GroundOverlay overlay = googleMap.addGroundOverlay(easyChest);
                 overlays.add(overlay);
                 EasyTreasureChest chest1 = new EasyTreasureChest(location);
@@ -195,7 +195,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 //chest1.addItem(possibleEasyItems.get(itemIndex3));
                 chestList.add(chest1);
             } else if (chestType >= 7 && chestType < 10) {
-                GroundOverlayOptions mediumChest = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.medium_treasure_chest)).position(location, 100, 100);
+                GroundOverlayOptions mediumChest = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.medium_treasure_chest)).position(location, 50, 50);
                 GroundOverlay overlay = googleMap.addGroundOverlay(mediumChest);
                 overlays.add(overlay);
                 MediumTreasureChest chest2 = new MediumTreasureChest(location);
@@ -207,7 +207,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //                chest2.addItem(possibleMediumItems.get(itemIndex3));
                 chestList.add(chest2);
             } else if (chestType == 10) {
-                GroundOverlayOptions hardChest = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.hard_treasure_chest)).position(location, 100, 100);
+                GroundOverlayOptions hardChest = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.hard_treasure_chest)).position(location, 50, 50);
                 GroundOverlay overlay = googleMap.addGroundOverlay(hardChest);
                 overlays.add(overlay);
                 HardTreasureChest chest3 = new HardTreasureChest(location);
@@ -284,26 +284,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng ltLn = new LatLng(location.getLatitude(), location.getLongitude());
         options.center(ltLn);
         options.radius(75);
-        options.fillColor(R.color.colorPrimary);
+        options.fillColor(R.color.wallet_holo_blue_light);
         detectionRadius = mMap.addCircle(options);
 
         for (int i = 0; i < chestList.size() - 1; i++) {
             double tempDist = calculate_distance(detectionRadius.getCenter(), chestList.get(i).getLatLng());
             // May need to be changed
-            Log.d("All chests", "" + tempDist);
-            if(tempDist < 7) {
-                Log.d("Other chests?", "" + tempDist);
-            }
             if (tempDist <= 6 && !closeChests.contains(chestList.get(i))) {
-                Log.d("Close chest", "" + tempDist);
                 closeChests.add(chestList.get(i));
                 chestList.remove(i);
             }
         }
 
-        /*for(int i = 0; i < closeChests.size() - 1; i++) {
-            if()
-        }*/
+        for(int i = 0; i < closeChests.size() - 1; i++) {
+            if(calculate_distance(detectionRadius.getCenter(), closeChests.get(i).getLatLng()) > 6) {
+                closeChests.remove(i);
+            }
+        }
         // Make accept challenge button visible when chests are nearby
         if ((closeChests.size()) > 0) {
             if (closeChests.get(0) instanceof EasyTreasureChest) {
@@ -330,13 +327,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
             firstLoad = false;
         }
-        //mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-
-        //stop location updates
-        /*if (mGoogleApiClient != null) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-        }*/
-
     }
 
     public double calculate_distance(LatLng location, LatLng latLng) {
@@ -446,7 +436,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void openProfile(View v) {
-        Intent intent = new Intent(MapsActivity.this, ProfileActivity.class);
+        Intent intent = new Intent(MapsActivity.this, HomePageActivity.class);
         startActivityForResult(intent, PROFILE_REQUEST);
     }
 
@@ -467,6 +457,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 closeChests.remove(0);
                 acceptChallenge.setVisibility(View.INVISIBLE);
+            }
+        }
+        else if(requestCode == PROFILE_REQUEST) {
+            if (resultCode == Activity.RESULT_OK) {
+                Log.d("Profile Closed", "Success");
             }
         }
     }
@@ -498,4 +493,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             }
         }
+
+    @Override
+    public void onBackPressed() {
+    }
     }

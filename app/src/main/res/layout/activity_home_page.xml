@@ -61,4 +61,25 @@
         android:id="@+id/icon"
         android:layout_alignStart="@+id/googleMapsButton" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Loot"
+        android:id="@+id/textView11"
+        android:layout_below="@+id/icon"
+        android:layout_alignParentStart="true"
+        android:textSize="26dp"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="22dp"/>
+
+    <GridView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/gridView2"
+        android:layout_above="@+id/googleMapsButton"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/textView11"
+        android:numColumns="4"/>
+
 </RelativeLayout>

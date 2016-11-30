@@ -54,4 +54,8 @@ public class QuizCompleteActivity extends AppCompatActivity {
         setResult(Activity.RESULT_OK, intent);
         finish();
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }
