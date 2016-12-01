@@ -218,7 +218,6 @@ public class HomePageActivity extends AppCompatActivity implements SensorEventLi
                 Resources res = getResources();
                 int id = res.getIdentifier(item, "mipmap", HomePageActivity.this.getPackageName());
                 imageView.setImageResource(id);
-                notifyDataSetChanged();
             }
             return imageView;
         }

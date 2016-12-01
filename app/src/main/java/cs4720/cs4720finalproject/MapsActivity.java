@@ -94,20 +94,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //Add all hard items to possible hard items here
         possibleHardItems.add("excalibur_item");
         possibleHardItems.add("iron_man_helmet_item");
-        //Excalibur exc = new Excalibur();
-        //possibleHardItems.add(exc);
-        //IronManHelmet irmh = new IronManHelmet();
-        //possibleHardItems.add(irmh);
+        possibleHardItems.add("iron_man_chestplate_item");
+        possibleHardItems.add("iron_man_boot_item");
+        possibleHardItems.add("iron_man_glove_item");
 
         //Add all easy items to possible easy items here
         possibleEasyItems.add("plain_stone_item");
-        //PlainStone pls = new PlainStone();
-        //possibleEasyItems.add(pls);
+        possibleEasyItems.add("wooden_sword_item");
+        possibleEasyItems.add("wooden_shield_item");
+        possibleEasyItems.add("bow_item");
+        possibleEasyItems.add("health_potion_item");
 
         //Add all medium items to possible medium items here
         possibleMediumItems.add("iron_helmet_item");
-        // IronHelmet irh = new IronHelmet();
-        //possibleMediumItems.add(irh);
+        possibleMediumItems.add("crystal_bow_item");
+        possibleMediumItems.add("iron_swords_item");
+        possibleMediumItems.add("iron_shield_item");
+        possibleMediumItems.add("skyrim_coin_item");
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
@@ -142,17 +145,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setMinZoomPreference(14);
 
         //Test chest
-        LatLng testLocation = new LatLng(38.031611, -78.510728);
+        LatLng testLocation = new LatLng(38.029056, -78.509951);
         GroundOverlayOptions testChest = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.easy_treasure_chest)).position(testLocation, 50, 50);
         GroundOverlay testOverlay = googleMap.addGroundOverlay(testChest);
         overlays.add(testOverlay);
         EasyTreasureChest testChest1 = new EasyTreasureChest(testLocation);
-        //int testItemIndex1 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size() - 1);
-        //int testItemIndex2 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size() - 1);
-        //int testItemIndex3 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size() - 1);
-        testChest1.addItem(possibleEasyItems.get(0));
-        testChest1.addItem(possibleEasyItems.get(0));
-        testChest1.addItem(possibleEasyItems.get(0));
+        int testItemIndex1 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size());
+        int testItemIndex2 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size());
+        int testItemIndex3 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size());
+        testChest1.addItem(possibleEasyItems.get(testItemIndex1));
+        testChest1.addItem(possibleEasyItems.get(testItemIndex2));
+        testChest1.addItem(possibleEasyItems.get(testItemIndex3));
         chestList.add(testChest1);
 
         LatLng testLocation2 = new LatLng(38.029055, -78.509931);
@@ -160,13 +163,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         GroundOverlay testOverlay2 = googleMap.addGroundOverlay(testChest2);
         overlays.add(testOverlay2);
         MediumTreasureChest testChest3 = new MediumTreasureChest(testLocation2);
-        //int testItemIndex1 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size() - 1);
-        //int testItemIndex2 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size() - 1);
-        //int testItemIndex3 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size() - 1);
-        testChest3.addItem(possibleMediumItems.get(0));
-        testChest3.addItem(possibleMediumItems.get(0));
-        testChest3.addItem(possibleMediumItems.get(0));
+        int testItemIndex4 = ThreadLocalRandom.current().nextInt(0, possibleMediumItems.size());
+        int testItemIndex5 = ThreadLocalRandom.current().nextInt(0, possibleMediumItems.size());
+        int testItemIndex6 = ThreadLocalRandom.current().nextInt(0, possibleMediumItems.size());
+        testChest3.addItem(possibleMediumItems.get(testItemIndex4));
+        testChest3.addItem(possibleMediumItems.get(testItemIndex5));
+        testChest3.addItem(possibleMediumItems.get(testItemIndex6));
         chestList.add(testChest3);
+
+        LatLng testLocation3 = new LatLng(38.029055, -78.509931);
+        GroundOverlayOptions testChest4 = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.hard_treasure_chest)).position(testLocation3, 50, 50);
+        GroundOverlay testOverlay3 = googleMap.addGroundOverlay(testChest4);
+        overlays.add(testOverlay3);
+        HardTreasureChest testChest5 = new HardTreasureChest(testLocation3);
+        int testItemIndex7 = ThreadLocalRandom.current().nextInt(0, possibleHardItems.size());
+        int testItemIndex8 = ThreadLocalRandom.current().nextInt(0, possibleHardItems.size());
+        int testItemIndex9 = ThreadLocalRandom.current().nextInt(0, possibleHardItems.size());
+        testChest5.addItem(possibleHardItems.get(testItemIndex7));
+        testChest5.addItem(possibleHardItems.get(testItemIndex8));
+        testChest5.addItem(possibleHardItems.get(testItemIndex9));
+        chestList.add(testChest5);
 
         double maxNorth = 38.070591;
         double maxWest = -78.523636;
@@ -187,36 +203,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 GroundOverlay overlay = googleMap.addGroundOverlay(easyChest);
                 overlays.add(overlay);
                 EasyTreasureChest chest1 = new EasyTreasureChest(location);
-                //int itemIndex1 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size() - 1);
-                //int itemIndex2 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size() - 1);
-                //int itemIndex3 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size() - 1);
-                //chest1.addItem(possibleEasyItems.get(itemIndex1));
-                //chest1.addItem(possibleEasyItems.get(itemIndex2));
-                //chest1.addItem(possibleEasyItems.get(itemIndex3));
+                int itemIndex1 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size());
+                int itemIndex2 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size());
+                int itemIndex3 = ThreadLocalRandom.current().nextInt(0, possibleEasyItems.size());
+                chest1.addItem(possibleEasyItems.get(itemIndex1));
+                chest1.addItem(possibleEasyItems.get(itemIndex2));
+                chest1.addItem(possibleEasyItems.get(itemIndex3));
                 chestList.add(chest1);
             } else if (chestType >= 7 && chestType < 10) {
                 GroundOverlayOptions mediumChest = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.medium_treasure_chest)).position(location, 50, 50);
                 GroundOverlay overlay = googleMap.addGroundOverlay(mediumChest);
                 overlays.add(overlay);
                 MediumTreasureChest chest2 = new MediumTreasureChest(location);
-//                int itemIndex1 = ThreadLocalRandom.current().nextInt(0, possibleMediumItems.size() - 1);
-//                int itemIndex2 = ThreadLocalRandom.current().nextInt(0, possibleMediumItems.size() - 1);
-//                int itemIndex3 = ThreadLocalRandom.current().nextInt(0, possibleMediumItems.size() - 1);
-//                chest2.addItem(possibleMediumItems.get(itemIndex1));
-//                chest2.addItem(possibleMediumItems.get(itemIndex2));
-//                chest2.addItem(possibleMediumItems.get(itemIndex3));
+                int itemIndex1 = ThreadLocalRandom.current().nextInt(0, possibleMediumItems.size());
+                int itemIndex2 = ThreadLocalRandom.current().nextInt(0, possibleMediumItems.size());
+                int itemIndex3 = ThreadLocalRandom.current().nextInt(0, possibleMediumItems.size());
+                chest2.addItem(possibleMediumItems.get(itemIndex1));
+                chest2.addItem(possibleMediumItems.get(itemIndex2));
+                chest2.addItem(possibleMediumItems.get(itemIndex3));
                 chestList.add(chest2);
             } else if (chestType == 10) {
                 GroundOverlayOptions hardChest = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.hard_treasure_chest)).position(location, 50, 50);
                 GroundOverlay overlay = googleMap.addGroundOverlay(hardChest);
                 overlays.add(overlay);
                 HardTreasureChest chest3 = new HardTreasureChest(location);
-//                int itemIndex1 = ThreadLocalRandom.current().nextInt(0, possibleHardItems.size() - 1);
-//                int itemIndex2 = ThreadLocalRandom.current().nextInt(0, possibleHardItems.size() - 1);
-//                int itemIndex3 = ThreadLocalRandom.current().nextInt(0, possibleHardItems.size() - 1);
-//                chest3.addItem(possibleHardItems.get(itemIndex1));
-//                chest3.addItem(possibleHardItems.get(itemIndex2));
-//                chest3.addItem(possibleHardItems.get(itemIndex3));
+                int itemIndex1 = ThreadLocalRandom.current().nextInt(0, possibleHardItems.size());
+                int itemIndex2 = ThreadLocalRandom.current().nextInt(0, possibleHardItems.size());
+                int itemIndex3 = ThreadLocalRandom.current().nextInt(0, possibleHardItems.size());
+                chest3.addItem(possibleHardItems.get(itemIndex1));
+                chest3.addItem(possibleHardItems.get(itemIndex2));
+                chest3.addItem(possibleHardItems.get(itemIndex3));
                 chestList.add(chest3);
             }
 
@@ -296,11 +312,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
 
-        for(int i = 0; i < closeChests.size() - 1; i++) {
+        /*for(int i = 0; i < closeChests.size() - 1; i++) {
             if(calculate_distance(detectionRadius.getCenter(), closeChests.get(i).getLatLng()) > 6) {
                 closeChests.remove(i);
             }
-        }
+        }*/
         // Make accept challenge button visible when chests are nearby
         if ((closeChests.size()) > 0) {
             if (closeChests.get(0) instanceof EasyTreasureChest) {

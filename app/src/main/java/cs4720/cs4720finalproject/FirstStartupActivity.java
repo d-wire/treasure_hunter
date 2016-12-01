@@ -118,7 +118,7 @@ public class FirstStartupActivity extends AppCompatActivity {
                 commit();
 
         //editor.putString(usernameKey, username);
-        Intent intent = new Intent(this, HomePageActivity.class);
+        Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
 
     }

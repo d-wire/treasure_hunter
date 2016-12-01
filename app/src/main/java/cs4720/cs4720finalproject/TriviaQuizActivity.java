@@ -149,7 +149,7 @@ public class TriviaQuizActivity extends AppCompatActivity {
             }
             Log.d("Complete", "Quiz finished: " + counter);
             Log.d("Counter", "" + responses);
-            //if(counter >= 3) {
+            if(counter >= 3) {
                 TinyDB tinyDB = new TinyDB(getApplicationContext());
                 ArrayList<String> items = tinyDB.getListString("allItems");
                 if(items != null) {
@@ -159,37 +159,16 @@ public class TriviaQuizActivity extends AppCompatActivity {
                 else {
                     tinyDB.putListString("allItems", chest.getItemList());
                 }
-                /*SharedPreferences readSharedPref = getSharedPreferences("items", Context.MODE_PRIVATE);
-                Gson gson = new Gson();
-                String json = readSharedPref.getString("key", null);
-                Type type = new TypeToken<ArrayList<String>>() {}.getType();
-                ArrayList<String> allItems = gson.fromJson(json, type);
-                Log.d("All items", "" + allItems);
-                if(allItems != null) {
-                    ArrayList<String> chestItems = chest.getItemList();
-                    allItems.addAll(chestItems);
-                    String json2 = gson.toJson(allItems);
-                    SharedPreferences.Editor editor = readSharedPref.edit();
-                    editor.putString("key", json);
-                    editor.commit();
-                }
-                else {
-                    String json2 = gson.toJson(chest.getItemList());
-                    SharedPreferences.Editor editor = readSharedPref.edit();
-                    editor.putString("key", json);
-                    editor.commit();
-                }*/
-
                 Intent nextActivity = new Intent(TriviaQuizActivity.this, QuizCompleteActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("chest", chest);
                 nextActivity.putExtra("sent chest", bundle);
                 startActivityForResult(nextActivity, QUIZ_SUCCESS);
-           // }
-            //else {
-                //Intent nextActivity = new Intent(TriviaQuizActivity.this, QuizFailedActivity.class);
-                //startActivityForResult(nextActivity, QUIZ_FAILED);
-           // }
+            }
+            else {
+                Intent nextActivity = new Intent(TriviaQuizActivity.this, QuizFailedActivity.class);
+                startActivityForResult(nextActivity, QUIZ_FAILED);
+            }
 
             /*Intent returnIntent = new Intent();
             setResult(Activity.RESULT_OK, returnIntent);
