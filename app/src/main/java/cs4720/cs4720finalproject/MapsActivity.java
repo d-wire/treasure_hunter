@@ -145,7 +145,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setMinZoomPreference(14);
 
         //Test chest
-        LatLng testLocation = new LatLng(38.029056, -78.509951);
+        LatLng testLocation = new LatLng(38.031611, -78.510728);
         GroundOverlayOptions testChest = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.easy_treasure_chest)).position(testLocation, 50, 50);
         GroundOverlay testOverlay = googleMap.addGroundOverlay(testChest);
         overlays.add(testOverlay);
@@ -158,7 +158,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         testChest1.addItem(possibleEasyItems.get(testItemIndex3));
         chestList.add(testChest1);
 
-        LatLng testLocation2 = new LatLng(38.029055, -78.509931);
+        LatLng testLocation2 = new LatLng(38.031611, -78.510728);
         GroundOverlayOptions testChest2 = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.medium_treasure_chest)).position(testLocation2, 50, 50);
         GroundOverlay testOverlay2 = googleMap.addGroundOverlay(testChest2);
         overlays.add(testOverlay2);
@@ -171,7 +171,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         testChest3.addItem(possibleMediumItems.get(testItemIndex6));
         chestList.add(testChest3);
 
-        LatLng testLocation3 = new LatLng(38.029055, -78.509931);
+        LatLng testLocation3 = new LatLng(38.031611, -78.510728);
         GroundOverlayOptions testChest4 = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.hard_treasure_chest)).position(testLocation3, 50, 50);
         GroundOverlay testOverlay3 = googleMap.addGroundOverlay(testChest4);
         overlays.add(testOverlay3);
